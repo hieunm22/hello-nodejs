@@ -1,0 +1,1 @@
+- [] move all js files to dist directory
