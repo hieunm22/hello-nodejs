@@ -5,26 +5,24 @@ export class RabbitMQClient {
 
   static async init(ampqUrl: string) {
     // amqp://localhost:5672
-    console.log("Publishing")
     const conn = await amqplib.connect(ampqUrl, "heartbeat=60")
     const ch = await conn.createChannel()
+    await ch
+      .assertExchange("exch", "direct", { durable: true })
+      .catch(console.error)
     RabbitMQClient.channel = ch
+    return ch
   }
 
-  static async sendMathTask(value: number) {
-    const exch = "exchange1"
-    const queueName = "math"
+  async sendMathTask(channel: amqplib.Channel, value: string) {
+    const queueName = "math-queue"
     const rabbitKey = "factorial"
-    const msg = value
-    await RabbitMQClient.channel
-      .assertExchange(exch, "direct", { durable: true })
-      .catch(console.error)
-    await RabbitMQClient.channel.assertQueue(queueName, { durable: true })
-    await RabbitMQClient.channel.bindQueue(queueName, exch, rabbitKey)
-    await RabbitMQClient.channel.publish(
-      exch,
+    await channel.assertQueue(queueName, { durable: true })
+    await channel.bindQueue(queueName, "exch", rabbitKey)
+    await channel.publish(
+      "exch",
       rabbitKey,
-      Buffer.from(msg.toString())
+      Buffer.from(value)
     )
   }
 }

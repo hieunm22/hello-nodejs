@@ -4,10 +4,13 @@ import * as http from "http"
 import * as winston from "winston"
 import * as expressWinston from "express-winston"
 import cors from "cors"
-import { CommonRoutesConfig } from "./common/common.routes.config"
+import { CommonRoutesConfig } from "./common/routes/common.routes.config"
 import { UsersRoutes } from "./users/users.routes.config"
 import { MathRoutes } from "./math/math.routes.config"
 import debug from "debug"
+import dotenv from "dotenv"
+
+dotenv.config();
 
 const app: express.Application = express()
 const server: http.Server = http.createServer(app)

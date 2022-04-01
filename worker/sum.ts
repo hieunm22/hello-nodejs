@@ -9,11 +9,11 @@ const rl = readline.createInterface({
 });
 
 const readlineAsyncA = () => new Promise((res, rej) => {
-  rl.on("line", line => res(line))
+  rl.on("line", res)
 })
 
 const readlineAsyncB = () => new Promise((res, rej) => {
-  rl.on("line", line => res(line))
+  rl.on("line", res)
 })
 
 async function recursiveReadline() {
